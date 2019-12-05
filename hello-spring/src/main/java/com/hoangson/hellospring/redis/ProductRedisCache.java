@@ -1,12 +1,15 @@
 package com.hoangson.hellospring.redis;
 
 import com.hoangson.hellospring.entity.Product;
+import com.hoangson.hellospring.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -15,12 +18,18 @@ public class ProductRedisCache implements RedisCache<Product> {
     private RedisTemplate template;
     private HashOperations hashOperations;
     private final String KEY = "PRODUCT";
+    @Autowired
+    private ProductRepository productRepository;
 
     @PostConstruct
-    private void init(){
+    public void init(){
         hashOperations = template.opsForHash();
-        Product product = new Product(2L, "Frieze", 1000L );
-        hashOperations.put(KEY, KEY + '-' + product.getId(), product);
+
+        //Load data from Data base
+        List<Product> listProduct;
+        listProduct = productRepository.findAll();
+        System.out.println(listProduct);
+        listProduct.forEach(product -> add(product));
     }
 
     @Override
@@ -36,6 +45,7 @@ public class ProductRedisCache implements RedisCache<Product> {
     @Override
     public Product find(String id) {
         return (Product) hashOperations.get(KEY, KEY + '-' + id);
+
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Product")
 public class Product  implements Serializable {
+
+//    private static final long serialVersionUID = 3854633356656149091L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,10 +23,4 @@ public class Product  implements Serializable {
 
     @Column(name="price")
     private Long price;
-
-    public Product(Long id, String name, Long price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-    }
 }

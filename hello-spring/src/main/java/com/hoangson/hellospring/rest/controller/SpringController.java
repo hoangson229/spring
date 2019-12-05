@@ -6,6 +6,7 @@ import com.hoangson.hellospring.entity.TestEntity;
 import com.hoangson.hellospring.interceptor.SecretKeyRequired;
 import com.hoangson.hellospring.mcache.CacheService;
 import com.hoangson.hellospring.redis.ProductRedisCache;
+import com.hoangson.hellospring.repository.ProductRepository;
 import com.hoangson.hellospring.repository.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,9 @@ public class SpringController {
 
     @Autowired
     ProductRedisCache productRedisCache;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @GetMapping("/name")
     public String getName() {
@@ -93,10 +97,15 @@ public class SpringController {
     public ResponseEntity<Product> getProductRedis(@RequestParam (name = "id") Long id) {
 
         System.out.println("getProductRedis ---------------> " + id);
+        Product product = productRedisCache.find(id.toString());
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
 
-        Product product = productRedisCache.find(String.valueOf(2));
-
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+    @GetMapping("/refreshProductRedis")
+    public ResponseEntity<List<Product>> refreshProductRedis() {
+        productRedisCache.init();
+        List<Product> listProduct = new ArrayList<>();
+        return new ResponseEntity<>(listProduct, HttpStatus.OK);
     }
 
 }

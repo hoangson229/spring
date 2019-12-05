@@ -18,4 +18,5 @@ public interface TestRepository extends JpaRepository<TestEntity, Long> {
     @Modifying
     @Query(value = "UPDATE test set name = :name where id = :id", nativeQuery = true)
     void updateName(@Param("id") Long id, @Param("name") String name);
+    
 }
