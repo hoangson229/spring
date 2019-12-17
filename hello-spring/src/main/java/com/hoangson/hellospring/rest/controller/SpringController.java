@@ -4,6 +4,7 @@ package com.hoangson.hellospring.rest.controller;
 import com.hoangson.hellospring.entity.Product;
 import com.hoangson.hellospring.entity.TestEntity;
 import com.hoangson.hellospring.interceptor.SecretKeyRequired;
+import com.hoangson.hellospring.kafka.KafkaProducer;
 import com.hoangson.hellospring.mcache.CacheService;
 import com.hoangson.hellospring.redis.ProductRedisCache;
 import com.hoangson.hellospring.repository.ProductRepository;
@@ -32,6 +33,9 @@ public class SpringController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    KafkaProducer kafkaProducer;
 
     @GetMapping("/name")
     public String getName() {
@@ -106,6 +110,12 @@ public class SpringController {
         productRedisCache.init();
         List<Product> listProduct = new ArrayList<>();
         return new ResponseEntity<>(listProduct, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/kafka/publish")
+    public void sendMessageToKafkaTopic(@RequestParam("message") String message) {
+        kafkaProducer.sendMessage(message);
     }
 
 }
