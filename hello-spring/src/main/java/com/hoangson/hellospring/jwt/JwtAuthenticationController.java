@@ -13,6 +13,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +47,17 @@ public class JwtAuthenticationController {
         JwtResponse jwtResponse =  new JwtResponse(token);
         return ResponseEntity.ok(jwtResponse);
     }
+
+    @RequestMapping(value = "/admin/test/token", method = RequestMethod.GET)
+    public ResponseEntity<?> editProduct() throws Exception {
+
+        return ResponseEntity.ok("JWT valid");
+    }
+
+
+
+
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
