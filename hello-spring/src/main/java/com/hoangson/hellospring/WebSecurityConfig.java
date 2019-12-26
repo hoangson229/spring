@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.authorizeRequests().antMatchers("/son/editname").hasRole("ADMIN");
+        httpSecurity.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN");
 // We don't need CSRF for this example
         httpSecurity.csrf().disable()
 // dont authenticate this particular request
